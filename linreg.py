@@ -7,6 +7,15 @@ import matplotlib.pyplot as plt
 from torch.optim import Optimizer
 from pathlib import Path
 
+#Global Vars
+#Create Model Directory: 
+MODEL_PATH = Path("Models")
+MODEL_PATH.mkdir(parents=True, exist_ok=True)
+#Create Model Save Path
+MODEL_NAME = "01_Linear.pth"
+MODEL_SAVE_PATH = MODEL_PATH / MODEL_NAME
+
+
 #Create Knonwn parameters:
 weight = 0.7
 bias = 0.3
@@ -141,12 +150,6 @@ plotPrediction(predictions=new_preds)
 
 saveModelChoice = input("Do you want to save the model\n(yes or no): ").lower()
 if saveModelChoice == "yes":
-    #Create Model Directory: 
-    MODEL_PATH = Path("Models")
-    MODEL_PATH.mkdir(parents=True, exist_ok=True)
-    #Create Model Save Path
-    MODEL_NAME = "01_Linear.pth"
-    MODEL_SAVE_PATH = MODEL_PATH / MODEL_NAME
     print(f"Saving model to: {MODEL_SAVE_PATH}")
     torch.save(obj=model_0.state_dict(), f=MODEL_SAVE_PATH)
     print("Model has been saved.")
@@ -154,3 +157,17 @@ elif saveModelChoice == "no":
     print("Okay, thanks for checking this out.")
 else:
     print("Option invalid moving on...")
+
+#To load the model we need to instantiate a new instance of the model class
+
+loaded_model_0 = LinearRegressionModel()
+
+#load the saved state_dict of model 0
+loaded_model_0.load_state_dict(torch.load(f=MODEL_SAVE_PATH))
+
+#So lets make some predictions. 
+loaded_model_0.eval()
+with torch.inference_mode():
+    loaded_model_preds = loaded_model_0(X_test)
+
+
