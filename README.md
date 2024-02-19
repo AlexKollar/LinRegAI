@@ -1,2 +1,2 @@
 # LinRegAI
-Simple linear regression model
+A simple linear regression model
